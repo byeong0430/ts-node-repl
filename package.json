@@ -1,8 +1,10 @@
 {
   "name": "ts-node-repl",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Interactive REPL server built on ts-node",
+  "files": ["dist", "LICENSE", "README.md", "package.json"],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc && esbuild"
