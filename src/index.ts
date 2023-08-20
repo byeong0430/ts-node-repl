@@ -1,104 +1,44 @@
 import repl from 'repl'
 import glob from 'glob'
-import * as chokidar from 'chokidar'
-import fs from 'fs'
+import { mountModulesToServer, requireModules } from './modules/module-utils'
+import { watchForChange } from './modules/watch-utils'
+import { IReplServerOptions } from './typings/types'
 
-const targetDir = __dirname
-const mountDirGlob = `${targetDir}/!(test*|graphql)/**/**/!(*.d|*.test).ts`
+export const startReplServer = ({
+  replOptions,
+  moduleMountOptions,
+  watchOptions
+}: IReplServerOptions) => {
+  const replServer = repl.start(replOptions)
 
-// inspiration from https://sapandiwakar.in/rails-like-console-for-node-js-and-node-ts-2/
-const replServer = repl.start({
-  prompt: 'app > ',
-  useColors: true
-})
-
-const watcher = chokidar.watch(mountDirGlob, {
-  ignoreInitial: true // We don't want resynth to take place for every single initial file change
-})
-
-replServer.addListener('exit', () => {
-  watcher.close()
-})
-
-const requireFile = ({ 
-  path, 
-  removeCache = false, 
-  callback 
-}: { 
-  path: string
-  removeCache?: boolean
-  callback: (exportVars: Record<string, unknown>) => void 
-}) => {
-  try {
-    if (removeCache) {
-      /**
-       * "require" caches already required files. Remove cache to get up-to-update file content
-       * reference: https://stackoverflow.com/questions/9210542/node-js-require-cache-possible-to-invalidate
-       */
-      delete require.cache[require.resolve(path)]
-    }
-
-    const exportVars = require(path)
-
-    callback(exportVars || {})
-  } catch (error) {
-    console.error(error)
+  if (!moduleMountOptions) {
+    return 
   }
-}
 
-const watchForChange = () => {
-  console.log('watching for file changes...')
+  glob(moduleMountOptions.pattern, (error, directories) => {
+    if (error) {
+      moduleMountOptions.onError?.(error)
+    } else {
+      directories.forEach((directory) => {
+        requireModules({
+          path: directory,
+          onSuccess: (requiredModules) => {
+            mountModulesToServer({ replServer, requiredModules, useGlobal: replOptions?.useGlobal })
+          },
+          onError: moduleMountOptions.onError
+        })
+      })
 
-  watcher.on('all', async (_, path) => {
-    const fileExists = fs.existsSync(path)
+      const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
-    let exportVars = {}
-
-    requireFile({
-      path, 
-      removeCache: fileExists,
-      callback: (freshExportVars) => {
-        exportVars = freshExportVars
-      }
-    })
-
-    Object.entries(exportVars).forEach(([key, value]) => {
-      if (fileExists) {
-        replServer.context[key] = value
-      } else {
-        delete replServer.context[key]
-      }
-    })
+      watchForChange({ 
+        replServer,
+        watchOptions: {
+          paths: watchPaths,
+          options: watchOptions.options
+        },
+        replUseGlobal: replOptions?.useGlobal
+      })
+    }
   })
 }
-
-/**
- * Excluded files / folders:
- * - files in test folders
- * - type files (d.ts)
- */
-
-glob(mountDirGlob, (err: any, directories: string[]) => {
-  if (err) {
-    throw new Error(err)
-  } else {
-    console.log('mounting export files. please wait...')
-
-    directories.forEach((dir) => {
-      requireFile({
-        path: dir, 
-        callback: (exportVars) => {
-          Object.keys(exportVars).forEach((exportVarName) => {
-            replServer.context[exportVarName] = exportVars[exportVarName]
-          })
-        }
-      })
-    })
-
-    console.log('done!')
-
-    watchForChange()
-  }
-})
-
-// replServer.context.mockEvent = mockEvent
