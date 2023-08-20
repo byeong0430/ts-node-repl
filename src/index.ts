@@ -3,6 +3,7 @@ import glob from 'glob'
 import { mountModulesToServer, requireModules } from './modules/module-utils'
 import { watchForChange } from './modules/watch-utils'
 import { IReplServerOptions } from './typings/types'
+import { FSWatcher } from 'chokidar'
 
 export const startReplServer = ({
   replOptions,
@@ -11,9 +12,7 @@ export const startReplServer = ({
 }: IReplServerOptions) => {
   const replServer = repl.start(replOptions)
 
-  if (!moduleMountOptions) {
-    return 
-  }
+  let watcher: FSWatcher | undefined
 
   glob(moduleMountOptions.pattern, (error, directories) => {
     if (error) {
@@ -31,7 +30,7 @@ export const startReplServer = ({
 
       const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
-      watchForChange({ 
+      watcher = watchForChange({ 
         replServer,
         watchOptions: {
           paths: watchPaths,
@@ -39,8 +38,15 @@ export const startReplServer = ({
         },
         replUseGlobal: replOptions?.useGlobal
       })
+
+      replServer.addListener('exit', () => {
+        watcher?.close()
+      })
     }
   })
 
-  return replServer
+  return {
+    replServer,
+    watcher
+  }
 }

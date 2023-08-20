@@ -24,10 +24,6 @@ export const watchForChange = ({
 }) => {
   const watcher = startWatcher(watchOptions)
 
-  replServer.addListener('exit', () => {
-    watcher.close()
-  })
-
   watcher.on('all', async (_, path) => {
     const moduleExists = fs.existsSync(path)
 
@@ -39,4 +35,6 @@ export const watchForChange = ({
       }
     })
   })
+
+  return watcher
 }
