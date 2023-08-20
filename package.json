@@ -1,6 +1,6 @@
 {
   "name": "ts-node-repl",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Interactive REPL server built on ts-node",
   "files": [
     "dist",
