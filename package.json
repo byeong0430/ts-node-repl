@@ -15,8 +15,15 @@
     "build": "tsc && esbuild",
     "start:repl": "ts-node examples/index.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ts-node",
+    "repl",
+    "interactive"
+  ],
+  "author": {
+    "name": "Byeong Kim",
+    "email": "byeong.kim0430@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.5.3",
