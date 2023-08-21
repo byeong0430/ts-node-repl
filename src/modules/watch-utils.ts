@@ -3,6 +3,7 @@ import fs from 'fs'
 import { mountModulesToServer, requireModules } from './module-utils'
 import { IWatchOptions } from '../typings/types'
 import repl from 'repl'
+import { say } from './cli'
 
 export const startWatcher = (watchOptions: IWatchOptions) => {
   const watcher = chokidar.watch(watchOptions.paths, {
@@ -23,6 +24,8 @@ export const watchForChange = ({
   replUseGlobal?: boolean
 }) => {
   const watcher = startWatcher(watchOptions)
+
+  say('watching for file changes...')
 
   watcher.on('all', async (_, path) => {
     const moduleExists = fs.existsSync(path)

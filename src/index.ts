@@ -31,7 +31,7 @@ export const startReplServer = ({
         })
       })
 
-      say('done!')
+      say('done! repl server ready.')
 
       const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
@@ -43,8 +43,6 @@ export const startReplServer = ({
         },
         replUseGlobal: replOptions?.useGlobal
       })
-
-      say('watching for file changes...')
 
       replServer.addListener('exit', () => {
         watcher?.close()
