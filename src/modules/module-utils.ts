@@ -1,4 +1,6 @@
-import { IModuleMountProps, IModuleRequireProps } from '../typings/types'
+import { IModuleMountOptions, IModuleMountProps, IModuleRequireProps } from '../typings/types'
+import { REPLServer } from 'repl'
+import { say } from './cli'
 
 export const invalidateCache = (path: string) => {
   delete require.cache[require.resolve(path)]
@@ -35,4 +37,31 @@ export const mountModulesToServer = ({
       replServer.context[name] = module
     }
   })
+}
+
+export const setModules = ({
+  directories,
+  useGlobal,
+  onError
+}: {
+  directories: string[]
+  useGlobal?: boolean,
+  onError?: IModuleMountOptions['onError']
+}) => (replServer: REPLServer) => {
+  say('mounting export files. please wait...')
+
+  directories.forEach((directory) => {
+    requireModules({
+      path: directory,
+      onSuccess: (requiredModules) => {
+        mountModulesToServer({ replServer, requiredModules, useGlobal })
+      },
+      onError
+    })
+  })
+
+  say('done! repl server ready.')
+  say('type .help for more information')
+
+  replServer.displayPrompt()
 }
