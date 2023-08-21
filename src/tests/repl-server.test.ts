@@ -8,54 +8,56 @@ jest.mock('glob', () => {
   })
 })
 
-test('should return created repl server', () => {
-  const { replServer } = startReplServer({
-    replOptions: {
-      prompt: 'app > ',
-      useColors: true
-    },
-    moduleMountOptions: {
-      pattern: './',
-      onError: (error) => {
-        throw error
+describe('repl-server', () => {
+  test('should return created repl server', () => {
+    const { replServer } = startReplServer({
+      replOptions: {
+        prompt: 'app > ',
+        useColors: true
+      },
+      moduleMountOptions: {
+        pattern: './',
+        onError: (error) => {
+          throw error
+        }
+      },
+      watchOptions: {
+        paths: './',
+        options: {
+          ignoreInitial: true
+        }
       }
-    },
-    watchOptions: {
-      paths: './',
-      options: {
-        ignoreInitial: true
-      }
-    }
-  })
-
-  expect(replServer).toBeDefined()
-  expect(replServer).toBeInstanceOf(REPLServer)
+    })
   
-  replServer.close()
-})
-
-test('should return created watcher', () => {
-  const { replServer, watcher } = startReplServer({
-    replOptions: {
-      prompt: 'app > ',
-      useColors: true
-    },
-    moduleMountOptions: {
-      pattern: './',
-      onError: (error) => {
-        throw error
-      }
-    },
-    watchOptions: {
-      paths: './',
-      options: {
-        ignoreInitial: true
-      }
-    }
+    expect(replServer).toBeDefined()
+    expect(replServer).toBeInstanceOf(REPLServer)
+    
+    replServer.close()
   })
-
-  expect(watcher).toBeDefined()
-  expect(watcher).toBeInstanceOf(FSWatcher)
   
-  replServer.close()
+  test('should return created watcher', () => {
+    const { replServer, watcher } = startReplServer({
+      replOptions: {
+        prompt: 'app > ',
+        useColors: true
+      },
+      moduleMountOptions: {
+        pattern: './',
+        onError: (error) => {
+          throw error
+        }
+      },
+      watchOptions: {
+        paths: './',
+        options: {
+          ignoreInitial: true
+        }
+      }
+    })
+  
+    expect(watcher).toBeDefined()
+    expect(watcher).toBeInstanceOf(FSWatcher)
+    
+    replServer.close()
+  })
 })
