@@ -1,6 +1,6 @@
 import { IModuleMountOptions, IModuleMountProps, IModuleRequireProps } from '../typings/types'
 import { REPLServer } from 'repl'
-import { say } from './cli'
+import { say } from '../modules/cli'
 
 export const invalidateCache = (path: string) => {
   delete require.cache[require.resolve(path)]

@@ -1,9 +1,9 @@
 import * as chokidar from 'chokidar'
 import fs from 'fs'
-import { mountModulesToServer, requireModules } from './module-utils'
+import { mountModulesToServer, requireModules } from './module'
 import { IWatchOptions } from '../typings/types'
 import { REPLServer } from 'repl'
-import { say } from './cli'
+import { say } from '../modules/cli'
 
 export const startWatcher = (watchOptions: IWatchOptions) => {
   const watcher = chokidar.watch(watchOptions.paths, {

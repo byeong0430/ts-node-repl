@@ -1,10 +1,10 @@
 import repl from 'repl'
-import { setModules } from './module-utils'
-import { watchForChange } from './watch-utils'
+import { setModules } from '../utils/module'
+import { watchForChange } from '../utils/watch'
 import { IReplServerOptions } from '../typings/types'
 import { FSWatcher } from 'chokidar'
-import { getGlobDirectories } from './glob-utils'
-import { defineCommands } from './repl-utils'
+import { getGlobDirectories } from '../utils/glob'
+import { defineCommands } from '../utils/repl'
 
 export const startReplServer = ({
   replOptions,
