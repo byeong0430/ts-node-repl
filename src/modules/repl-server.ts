@@ -15,13 +15,15 @@ export const startReplServer = ({
 
   let watcher: FSWatcher | undefined
  
-  const directories = getGlobDirectories(moduleMountOptions)
+  const directories = getGlobDirectories(moduleMountOptions.pattern)
 
-  const reloadModules = () => setModules({
-    directories,
-    useGlobal: replOptions?.useGlobal,
-    onError: moduleMountOptions.onError
-  })(replServer)
+  const reloadModules = () => {
+    setModules({
+      directories,
+      useGlobal: replOptions?.useGlobal,
+      onError: moduleMountOptions.onError
+    })(replServer)
+  }
 
   reloadModules()
 
