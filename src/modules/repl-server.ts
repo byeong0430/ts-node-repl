@@ -25,16 +25,6 @@ export const startReplServer = ({
 
   reloadModules()
 
-  defineCommands([
-    {
-      keyword: 'reset',
-      command: {
-        help: 'Reset loaded modules',
-        action: reloadModules
-      }
-    }
-  ])(replServer)
-
   const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
   watcher = watchForChange({ 
@@ -46,9 +36,26 @@ export const startReplServer = ({
     replUseGlobal: replOptions?.useGlobal
   })
 
-  replServer.addListener('exit', () => {
-    watcher?.close()
-  })
+  defineCommands([
+    {
+      keyword: 'reset',
+      command: {
+        help: 'Reset loaded modules',
+        action: reloadModules
+      }
+    },
+    {
+      keyword: 'exit',
+      command: {
+        help: 'Exit the REPL',
+        action: () => {
+          replServer.close()
+          watcher?.close()
+          process.exit()
+        }
+      }
+    }
+  ])(replServer)
 
   return {
     replServer,
