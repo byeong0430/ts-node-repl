@@ -2,7 +2,7 @@ import * as chokidar from 'chokidar'
 import fs from 'fs'
 import { mountModulesToServer, requireModules } from './module-utils'
 import { IWatchOptions } from '../typings/types'
-import repl from 'repl'
+import { REPLServer } from 'repl'
 import { say } from './cli'
 
 export const startWatcher = (watchOptions: IWatchOptions) => {
@@ -20,7 +20,7 @@ export const watchForChange = ({
   replUseGlobal
 }: { 
   watchOptions: IWatchOptions
-  replServer: repl.REPLServer
+  replServer: REPLServer
   replUseGlobal?: boolean
 }) => {
   const watcher = startWatcher(watchOptions)

@@ -1,5 +1,5 @@
 import * as chokidar from 'chokidar'
-import repl from 'repl'
+import { REPLCommand, REPLServer, ReplOptions } from 'repl'
 
 export interface IModuleMountOptions {
   pattern: string,
@@ -13,7 +13,7 @@ export interface IWatchOptions {
 }
 
 export interface IReplServerOptions {
-  replOptions?: repl.ReplOptions
+  replOptions?: ReplOptions
   moduleMountOptions: IModuleMountOptions,
   watchOptions: IWatchOptions
 }
@@ -26,7 +26,12 @@ export interface IModuleRequireProps {
 }
 
 export interface IModuleMountProps {
-  replServer: repl.REPLServer
+  replServer: REPLServer
   requiredModules: NodeRequire
   useGlobal?: boolean
+}
+
+export interface IREPLCommand {
+  keyword: string,
+  command: REPLCommand
 }
