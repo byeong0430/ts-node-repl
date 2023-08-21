@@ -26,9 +26,6 @@ export const watchForChange = ({
   const watcher = startWatcher(watchOptions)
 
   say('watching for file changes...')
-
-  replServer.displayPrompt()
-
   watcher.on('all', async (_, path) => {
     const moduleExists = fs.existsSync(path)
 
@@ -40,6 +37,8 @@ export const watchForChange = ({
       }
     })
   })
+
+  replServer.displayPrompt()
 
   return watcher
 }
