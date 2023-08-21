@@ -3,6 +3,7 @@ import glob from 'glob'
 import { mountModulesToServer, requireModules } from './modules/module-utils'
 import { watchForChange } from './modules/watch-utils'
 import { IReplServerOptions } from './typings/types'
+import { say } from './modules/cli'
 import { FSWatcher } from 'chokidar'
 
 export const startReplServer = ({
@@ -18,6 +19,8 @@ export const startReplServer = ({
     if (error) {
       moduleMountOptions.onError?.(error)
     } else {
+      say('mounting export files. please wait...')
+
       directories.forEach((directory) => {
         requireModules({
           path: directory,
@@ -27,6 +30,8 @@ export const startReplServer = ({
           onError: moduleMountOptions.onError
         })
       })
+
+      say('done!')
 
       const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
@@ -38,6 +43,8 @@ export const startReplServer = ({
         },
         replUseGlobal: replOptions?.useGlobal
       })
+
+      say('watching for file changes...')
 
       replServer.addListener('exit', () => {
         watcher?.close()
