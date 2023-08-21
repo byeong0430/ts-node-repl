@@ -1,21 +1,36 @@
 {
   "name": "ts-node-repl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive REPL server built on ts-node",
-  "files": ["dist", "LICENSE", "README.md", "package.json"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "tsc && esbuild"
+    "build": "tsc && esbuild",
+    "start:repl": "ts-node examples/index.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ts-node",
+    "repl",
+    "interactive"
+  ],
+  "author": {
+    "name": "Byeong Kim",
+    "email": "byeong.kim0430@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
+    "chokidar": "^3.5.3",
     "esbuild": "^0.19.2"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
     "@types/jest": "^29.5.3",
     "jest": "^29.6.2",
     "ts-jest": "^29.1.1",
