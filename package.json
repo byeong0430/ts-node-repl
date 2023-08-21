@@ -1,6 +1,6 @@
 {
   "name": "ts-node-repl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Interactive REPL server built on ts-node",
   "files": [
     "dist",
@@ -13,6 +13,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc && esbuild",
+    "publish": "yarn build && npm publish",
     "start:repl": "ts-node examples/index.ts"
   },
   "keywords": [
