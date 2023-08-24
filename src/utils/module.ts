@@ -36,8 +36,6 @@ export const mountModulesToServer = ({
     } else {
       replServer.context[name] = module
     }
-
-    say(`${name} refreshed`)
   })
 }
 

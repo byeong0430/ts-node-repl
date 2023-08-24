@@ -2,7 +2,6 @@ import repl from 'repl'
 import { setModules } from '../utils/module'
 import { watchForChange } from '../utils/watch'
 import { IReplServerOptions } from '../typings/types'
-import { FSWatcher } from 'chokidar'
 import { getGlobDirectories } from '../utils/glob'
 import { defineCommands } from '../utils/repl'
 
@@ -13,8 +12,6 @@ export const startReplServer = ({
 }: IReplServerOptions) => {
   const replServer = repl.start(replOptions)
 
-  let watcher: FSWatcher | undefined
- 
   const directories = getGlobDirectories(moduleMountOptions.pattern)
 
   const reloadModules = () => {
@@ -29,7 +26,7 @@ export const startReplServer = ({
 
   const watchPaths = watchOptions.paths || moduleMountOptions.pattern
 
-  watcher = watchForChange({ 
+  const watcher = watchForChange({ 
     replServer,
     watchOptions: {
       paths: watchPaths,
