@@ -40,10 +40,12 @@ export const mountModulesToServer = ({
 }
 
 export const setModules = ({
+  verbose,
   directories,
   useGlobal,
   onError
 }: {
+  verbose?: boolean
   directories: string[]
   useGlobal?: boolean,
   onError?: IModuleMountOptions['onError']
@@ -58,6 +60,10 @@ export const setModules = ({
       },
       onError
     })
+
+    if (verbose) {
+      say(`mounted ${directory}`)
+    }
   })
 
   say('done! repl server ready.')

@@ -15,10 +15,12 @@ export const startWatcher = (watchOptions: IWatchOptions) => {
 }
 
 export const watchForChange = ({ 
+  verbose,
   watchOptions,
   replServer,
   replUseGlobal
 }: { 
+  verbose?: boolean
   watchOptions: IWatchOptions
   replServer: REPLServer
   replUseGlobal?: boolean
@@ -26,6 +28,7 @@ export const watchForChange = ({
   const watcher = startWatcher(watchOptions)
 
   say('watching for file changes...')
+
   watcher.on('all', async (_, path) => {
     const moduleExists = fs.existsSync(path)
 
@@ -34,6 +37,11 @@ export const watchForChange = ({
       removeCache: moduleExists,
       onSuccess: (requiredModules) => {
         mountModulesToServer({ replServer, requiredModules, useGlobal: replUseGlobal })
+
+        if (verbose) {
+          say(`mounted ${path}`)
+          replServer.displayPrompt()
+        }
       }
     })
   })

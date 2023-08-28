@@ -6,6 +6,7 @@ import { getGlobDirectories } from '../utils/glob'
 import { defineCommands } from '../utils/repl'
 
 export const startReplServer = ({
+  verbose = false,
   replOptions,
   moduleMountOptions,
   watchOptions
@@ -16,6 +17,7 @@ export const startReplServer = ({
 
   const reloadModules = () => {
     setModules({
+      verbose,
       directories,
       useGlobal: replOptions?.useGlobal,
       onError: moduleMountOptions.onError
@@ -28,6 +30,7 @@ export const startReplServer = ({
 
   const watcher = watchForChange({ 
     replServer,
+    verbose,
     watchOptions: {
       paths: watchPaths,
       options: watchOptions.options

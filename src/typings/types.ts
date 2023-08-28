@@ -13,6 +13,7 @@ export interface IWatchOptions {
 }
 
 export interface IReplServerOptions {
+  verbose?: boolean
   replOptions?: ReplOptions
   moduleMountOptions: IModuleMountOptions,
   watchOptions: IWatchOptions
