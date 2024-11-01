@@ -1,5 +1,6 @@
 import { IModuleMountOptions, IModuleRequireProps } from '../typings/types'
 import { buildGlobDirs } from './glob'
+import { logger } from './log'
 
 const requireModule = (path: string): NodeRequire => require(path) || {}
 
@@ -7,7 +8,11 @@ export const modules = {
   load: function (globPattern: string, onError?: IModuleMountOptions['onError']) {
     const dirs = buildGlobDirs(globPattern)
 
-    dirs.forEach((dir) => this.require({ path: dir, onError }))
+    dirs.forEach((dir, index) => {
+      const process = logger.printProcess(`Loading ${index + 1}/${dirs.length}: ${dir}`)
+      this.require({ path: dir, onError })
+      if (dirs.length === index + 1) process.done()
+    })
   },
   require: function (params: IModuleRequireProps) {
     try {

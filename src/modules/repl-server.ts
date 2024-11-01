@@ -36,11 +36,11 @@ const createRepl = (opts?: ReplOptions) => {
 }
 
 const prepareRepl = (serverOpts: IReplServerOptions) => {
-  logger.info('mounting export files. please wait...')
+  logger.print('mounting export files. please wait...')
   modules.load(serverOpts.moduleMountOptions.pattern, serverOpts.moduleMountOptions.onError)
 
-  logger.info('done! repl server ready.')
-  logger.info('type .help for more information')
+  logger.print('done! repl server ready.')
+  logger.print('type .help for more information')
   logger.displayPrompt()
 
   const watcher = watchForChange({ 

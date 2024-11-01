@@ -2,7 +2,6 @@ import * as chokidar from 'chokidar'
 import fs from 'fs'
 import { modules } from './module'
 import { IWatchOptions } from '../typings/types'
-import { REPLServer } from 'repl'
 import { logger } from './log'
 
 export const startWatcher = (opts: IWatchOptions) => {
@@ -15,7 +14,7 @@ export const startWatcher = (opts: IWatchOptions) => {
 
 export const watchForChange = (opts: IWatchOptions) => {
   const watcher = startWatcher(opts)
-  logger.info('watching for file changes...')
+  logger.print('watching for file changes...')
 
   watcher.on('all', async (_, path) => {
     const moduleExists = fs.existsSync(path)
