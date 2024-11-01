@@ -21,7 +21,6 @@ export interface IReplServerOptions {
 export interface IModuleRequireProps {
   path: string
   removeCache?: boolean
-  onSuccess: (requireModules: NodeRequire) => void 
   onError?: (error: Error) => void
 }
 
