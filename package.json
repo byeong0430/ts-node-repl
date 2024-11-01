@@ -27,9 +27,11 @@
   },
   "license": "ISC",
   "dependencies": {
+    "ansicolors": "^0.3.2",
     "chokidar": "^3.5.3"
   },
   "devDependencies": {
+    "@types/ansicolors": "^0.0.38",
     "@types/glob": "^8.1.0",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.5.1",
