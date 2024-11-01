@@ -32,7 +32,6 @@ const createRepl = (opts?: ReplOptions) => {
   global._repl = r
   logger.repl = r
 
-  logger.info('mounting export files. please wait...')
   return r
 }
 
